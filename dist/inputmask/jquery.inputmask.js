@@ -3,7 +3,7 @@
 * http://github.com/RobinHerbots/jquery.inputmask
 * Copyright (c) 2010 - 2015 Robin Herbots
 * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
-* Version: 3.1.64-11
+* Version: 3.1.64-12
 */
 !function(factory) {
     "function" == typeof define && define.amd ? define([ "jquery" ], factory) : "object" == typeof exports ? module.exports = factory(require("jquery")) : factory(jQuery);
@@ -595,8 +595,10 @@
                     caretPos = result.caret || caretPos;
                 }
             }
-            input._valueSet(buffer.join("")), void 0 != caretPos && caret(input, caretPos), 
-            triggerInputEvent === !0 && (skipInputEvent = !0, $(input).trigger("input"));
+            var valuestr = buffer.join("");
+            input._valueSet(caretPos ? valuestr.substr(0, caretPos) : valuestr === opts.placeholder ? "" : valuestr), 
+            void 0 != caretPos && caret(input, caretPos), triggerInputEvent === !0 && (skipInputEvent = !0, 
+            $(input).trigger("input"));
         }
         function getPlaceholder(pos, test) {
             if (test = test || getTest(pos), void 0 != test.placeholder) return test.placeholder;
@@ -712,10 +714,8 @@
         function isComplete(buffer) {
             if ($.isFunction(opts.isComplete)) return opts.isComplete.call($el, buffer, opts);
             if ("*" == opts.repeat) return void 0;
-            {
-                var complete = !1, lrp = determineLastRequiredPosition(!0), aml = seekPrevious(lrp.l);
-                getLastValidPosition();
-            }
+            var complete = !1, lrp = determineLastRequiredPosition(!0), aml = seekPrevious(lrp.l);
+            getLastValidPosition();
             if (void 0 == lrp.def || lrp.def.newBlockMarker || lrp.def.optionality || lrp.def.optionalQuantifier) {
                 complete = !0;
                 for (var i = 0; aml >= i; i++) {
